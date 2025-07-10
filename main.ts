@@ -1,0 +1,28 @@
+input.onButtonPressed(Button.AB, function () {
+    kitronik_air_quality.eraseData()
+})
+kitronik_air_quality.calcBaselines()
+kitronik_air_quality.controlDisplayOnOff(kitronik_air_quality.onOff(true))
+kitronik_air_quality.setDataForUSB()
+kitronik_air_quality.setupGasSensor()
+kitronik_air_quality.setDate(3, 7, 25)
+basic.forever(function () {
+    kitronik_air_quality.measureData()
+    kitronik_air_quality.includeDate(kitronik_air_quality.onOff(true))
+    kitronik_air_quality.includeTime(kitronik_air_quality.onOff(true))
+    kitronik_air_quality.selectSeparator(kitronik_air_quality.Separator.tab)
+    kitronik_air_quality.logData()
+    basic.pause(5000)
+})
+basic.forever(function () {
+    kitronik_air_quality.sendAllData()
+})
+basic.forever(function () {
+    kitronik_air_quality.measureData()
+    kitronik_air_quality.show("Temperature:" + ("" + kitronik_air_quality.readTemperature(kitronik_air_quality.TemperatureUnitList.C)) + " C", 1, kitronik_air_quality.ShowAlign.Left)
+    kitronik_air_quality.show("Humidity:" + ("" + kitronik_air_quality.readHumidity()) + "%", 2, kitronik_air_quality.ShowAlign.Left)
+    kitronik_air_quality.show("Pressure:" + ("" + kitronik_air_quality.readPressure(kitronik_air_quality.PressureUnitList.Pa) / 1000) + " kPa", 3, kitronik_air_quality.ShowAlign.Left)
+    kitronik_air_quality.show("AQI Score :" + kitronik_air_quality.getAirQualityScore(), 4, kitronik_air_quality.ShowAlign.Left)
+    kitronik_air_quality.show("eCO2: " + kitronik_air_quality.readeCO2() + "ppm", 5, kitronik_air_quality.ShowAlign.Left)
+    basic.pause(5000)
+})
